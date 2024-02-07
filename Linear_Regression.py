@@ -16,32 +16,39 @@ class LinearRegression:
         self.learning_rate = learning_rate
 
         # default value of beta which is the weights or coefficient
-        self.beta = np.zeros(x.shape[1])
-
-    def update(self, updated_beta):
-
-        return 1
+        #self.beta = np.zeros(x.shape[1])
 
     
-    def gradient(self,x,y,beta):
+    def gradient(self,beta):
 
         x_t = np.transpose(self.x)
 
         x_beta = np.dot(self.x,beta)
 
-        gradient = -2 *  np.dot(x_t, self.y - x_beta)
+        gradient = -1 *  np.dot(x_t, self.y - x_beta)
 
         return gradient
+    
+    def update(self, beta):
+
+        new_beta = beta - self.learning_rate * self.gradient(beta)
+
+        return new_beta
 
         
-
-
-
     def fit(self):
 
-        #compute the gradient
-        return 1
+        beta = np.zeros(self.x.shape[1])
+
+        for iter in range(self.iteration):
+
+            beta = self.update(beta)
+
+        return beta
         
 
     def predict():
+        pass
+
+    def coefficient(): # weights+intercept
         pass
