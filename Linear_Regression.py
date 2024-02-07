@@ -16,7 +16,7 @@ class LinearRegression:
         self.learning_rate = learning_rate
 
         # default value of beta which is the weights or coefficient
-        #self.beta = np.zeros(x.shape[1])
+
 
     
     def gradient(self,beta):
