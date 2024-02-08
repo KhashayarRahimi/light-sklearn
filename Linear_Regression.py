@@ -2,10 +2,10 @@ import numpy as np
 
 class LinearRegression:
 
-    def __init__(self,x,y,iteration = 100, learning_rate = 0.1):
+    def __init__(self,x,y,iteration = 1000, learning_rate = 0.1):
         
         # input matrix
-        self.x = x
+        self.x = np.c_[ x, np.ones(x.shape[0]) ]
 
         # output vector
         self.y = y
@@ -25,7 +25,7 @@ class LinearRegression:
 
         x_beta = np.dot(self.x,beta)
 
-        gradient = -1 *  np.dot(x_t, self.y - x_beta)
+        gradient = (-1/(self.x.shape[0])) *  np.dot(x_t, self.y - x_beta)
 
         return gradient
     
@@ -52,3 +52,40 @@ class LinearRegression:
 
     def coefficient(): # weights+intercept
         pass
+
+
+
+
+
+
+#----------------------------------------
+
+
+# Test the model
+"""
+import Linear_Regression
+import random
+import numpy as np
+
+X = []
+
+for i, j , k in zip(range(100000),range(100000), range(100000)):
+
+    X.append([random.random(),random.random(),random.random()])
+
+X = np.array(X)
+
+y = np.dot(X, np.array([1.5+random.random(), -2.7+random.random() , .01+random.random()]))+3
+
+
+LR = Linear_Regression.LinearRegression(s,y,learning_rate=0.1)#scaled_x,scaled_y)
+
+coef = LR.fit()
+
+print(coef) ---> [ 2.22079927 -1.78341178  0.80279153  2.99049536]
+
+
+from sklearn.linear_model import LinearRegression
+reg = LinearRegression().fit(s, y)
+print(reg.coef_,reg.intercept_)  ---> [ 2.21527174 -1.78997526  0.79681398] 2.999999999999995
+"""
