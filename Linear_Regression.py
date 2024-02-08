@@ -36,13 +36,17 @@ class LinearRegression:
         return new_beta
 
         
-    def fit(self):
+    def fit(self,Coef = True):
 
         beta = np.zeros(self.x.shape[1])
 
         for iter in range(self.iteration):
 
             beta = self.update(beta)
+
+        if Coef:
+
+            print(f"Coefficients:{beta[:-1]} \n Intercept:{beta[-1]}")
 
         return beta
         
@@ -51,29 +55,37 @@ class LinearRegression:
 
         X_test = np.c_[ X_test, np.ones(X_test.shape[0]) ]
 
-        Coefs = self.fit()
+        Coefs = self.fit(Coef = False)
 
         y_pred = np.dot(X_test,Coefs)
 
         return y_pred
+    
+    def MAE(self, y_true, y_pred):
         
 
-    def coefficient(): # weights+intercept
-        pass
+        MAE = 0
+        for sample in range(y_true.shape[0]):
 
+            MAE += abs(y_true[sample] - y_pred[sample])
+        
+        MAE = MAE/(y_true.shape[0])
 
-
-
+        return MAE
+        
 
 
 #----------------------------------------
 
-
-# Test the model
 """
+Examples:
+------------------------------------------------
+
+from sklearn.metrics import mean_absolute_error
 import Linear_Regression
-import random
 import numpy as np
+import random
+
 
 X = []
 
@@ -94,12 +106,12 @@ print(coef) ---> [ 2.22079927 -1.78341178  0.80279153  2.99049536]
 
 test = np.array([[1,2,3],[22,0,2]])
 LR.predict(test) ---> array([-0.27789246, 40.00380568])
-
+print(LR.MAE(y,y_pred)) ---> 0.00294
 
 
 from sklearn.linear_model import LinearRegression
 reg = LinearRegression().fit(X, y)
 print(reg.coef_,reg.intercept_)  ---> [ 2.21527174 -1.78997526  0.79681398] 2.999999999999995
 reg.predict(test) ---> array([-0.32091392, 39.80032898])
-
+print(mean_absolute_error(y, y_pred)) ---> 0.00294
 """
