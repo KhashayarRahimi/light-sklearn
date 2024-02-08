@@ -47,8 +47,16 @@ class LinearRegression:
         return beta
         
 
-    def predict():
-        pass
+    def predict(self,X_test):
+
+        X_test = np.c_[ X_test, np.ones(X_test.shape[0]) ]
+
+        Coefs = self.fit()
+
+        y_pred = np.dot(X_test,Coefs)
+
+        return y_pred
+        
 
     def coefficient(): # weights+intercept
         pass
@@ -84,8 +92,14 @@ coef = LR.fit()
 
 print(coef) ---> [ 2.22079927 -1.78341178  0.80279153  2.99049536]
 
+test = np.array([[1,2,3],[22,0,2]])
+LR.predict(test) ---> array([-0.27789246, 40.00380568])
+
+
 
 from sklearn.linear_model import LinearRegression
-reg = LinearRegression().fit(s, y)
+reg = LinearRegression().fit(X, y)
 print(reg.coef_,reg.intercept_)  ---> [ 2.21527174 -1.78997526  0.79681398] 2.999999999999995
+reg.predict(test) ---> array([-0.32091392, 39.80032898])
+
 """
