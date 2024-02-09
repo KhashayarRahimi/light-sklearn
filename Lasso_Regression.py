@@ -2,13 +2,27 @@ import numpy as np
 from Linear_Regression import LinearRegression
 
 
-class RidgeRegression(LinearRegression):
+class LassoRegression(LinearRegression):
 
     def __init__(self,x,y,iteration = 1000, learning_rate = 0.1,Lambda =1.0):
 
         super().__init__(x,y,iteration, learning_rate)
 
         self.Lambda = Lambda
+        
+
+    
+    def _vetor_abs(self, vector):
+
+        for indx in range(len(vector)):
+
+            if vector[indx] < 0:
+
+                vector[indx] = abs(vector[indx])
+        
+        return vector
+
+
     
     #override on LinearRegression class
     def gradient(self,beta):
@@ -17,8 +31,9 @@ class RidgeRegression(LinearRegression):
 
         x_beta = np.dot(self.x,beta)
 
-        gradient = (-1/(self.x.shape[0])) * ( np.dot(x_t, self.y - x_beta) +\
-        self.Lambda * beta)
+        absOfWeights = self._vetor_abs(beta)
+
+        gradient = (-1/(self.x.shape[0])) * ( np.dot(x_t, self.y - x_beta) + self.Lambda * absOfWeights)
 
         return gradient
 
@@ -31,7 +46,7 @@ Examples:
 import random
 import numpy as np
 import Linear_Regression
-import Ridge_Regression
+import Lasso_Regression
 from sklearn.metrics import mean_absolute_error
 
 
@@ -53,11 +68,11 @@ coef = LR.fit()
 y_pred = LR.predict(X)
 print(LR.MAE(y,y_pred)) ---> 0.1034
 
-RR = Ridge_Regression.RidgeRegression(X,y,iteration = 1000,
-                                      learning_rate=0.01,
-                                      Lambda=140.0)
+LaR = Lasso_Regression.LassoRegression(X,y,iteration = 1000,
+                                       learning_rate=0.01,
+                                       Lambda=135.0)
 
-coef = RR.fit()
-y_pred = RR.predict(X)
-print(RR.MAE(y,y_pred)) ---> 0.0035
+coef = LaR.fit()
+y_pred = LaR.predict(X)
+print(LaR.MAE(y,y_pred)) ---> 0.0046
 """
