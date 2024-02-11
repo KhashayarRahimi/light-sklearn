@@ -135,7 +135,7 @@ print(LogR.accuracy(y_test,y_pred)) ---> 0.923
 """ 
     
 
-class MultiClassLoisticRegression(BinaryLogisticRegression):
+class MultiClassLogisticRegression(BinaryLogisticRegression):
 
     def __init__(self, x, y, iteration = 1000, learning_rate = 0.1):
 
@@ -276,7 +276,7 @@ test_size = 0.3  # 30% of the data will be used for testing
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
 
 
-LogR = Logistic_Regression.MultiClassLoisticRegression(X_train,y_train,iteration= 100,
+LogR = Logistic_Regression.MultiClassLogisticRegression(X_train,y_train,iteration= 100,
                                                        learning_rate=0.01)
 
 LogR.fit()
