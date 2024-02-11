@@ -43,7 +43,7 @@ class LinearDiscriminantAnalysis:
         args = np.transpose(args)
 
         # dimension of the covariance matrix
-        CovMatrix = np.zeros((self.x.shape[1],self.x.shape[1]))
+        CovMatrix = np.zeros((args.shape[0],args.shape[0]))
         #print(CovMatrix.shape)
         #print(args[0])
 
@@ -84,19 +84,24 @@ class LinearDiscriminantAnalysis:
     
     def fit(self):
 
-        CovMatrix = self.covariance_matrix(self.x)
+        CovMatrix = {}
+        InvCovMatrix = {}
+
+        for cat in range(len(set(self.y))):
+
+            CovMatrix[cat] = self.covariance_matrix(self.x[np.where(self.y == cat)[0]])
         #print(CovMatrix)
         
 
-        try:
-            InvCovMatrix = np.linalg.inv(CovMatrix)
+            try:
+                InvCovMatrix[cat] = np.linalg.inv(CovMatrix[cat])
 
-        # The Covariance matrix is singular and does not have invers;
-        # therefore we add a small value to its diagonal
-        except np.linalg.LinAlgError:
+            # The Covariance matrix is singular and does not have invers;
+            # therefore we add a small value to its diagonal
+            except np.linalg.LinAlgError:
 
-            np.fill_diagonal(CovMatrix, CovMatrix.diagonal() + 0.0001)
-            InvCovMatrix = np.linalg.inv(CovMatrix)
+                np.fill_diagonal(CovMatrix[cat], CovMatrix[cat].diagonal() + 0.0001)
+                InvCovMatrix[cat] = np.linalg.inv(CovMatrix[cat])
 
         #print('CovMatrix',CovMatrix)
         #print('InvCovMatrix',InvCovMatrix)
@@ -104,7 +109,7 @@ class LinearDiscriminantAnalysis:
 
         for cat in range(len(set(self.y))):
 
-            D = self.delta_freeX(cat, InvCovMatrix)
+            D = self.delta_freeX(cat, InvCovMatrix[cat])
 
             Information[cat] = [D[0], D[1]]
         
