@@ -1,7 +1,19 @@
 import numpy as np
 import math
 
-class LinearDiscriminantAnalysis:
+class FaultyLinearDiscriminantAnalysis:
+
+    """
+    This implementation is based on the formula of delta_k(x) which is defined in the following book:
+
+    An Introduction to Statistical Learning: With Applications in R By Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani
+
+    I wonder why it does not works! It actually performs as a baseline.
+
+    However after this class we have another class named LinearDiscriminantAnalysis which
+    works with the orginal formula of calculating multivariate guassian pdf and surley performs nice.
+    
+    """
 
     def __init__(self, x, y):
 
@@ -154,10 +166,9 @@ class LinearDiscriminantAnalysis:
             
 
             
-import numpy as np
 from scipy.stats import multivariate_normal
 
-class LinearDiscriminantAnalysis1:
+class LinearDiscriminantAnalysis:
 
     def __init__(self):
         """
@@ -188,7 +199,7 @@ class LinearDiscriminantAnalysis1:
         self.class_means = np.array([np.mean(X[y == c], axis=0) for c in self.classes])
 
         # Compute class covariance matrices
-        self.class_covs = np.array([np.cov(X[y == c].T) for c in self.classes])
+        self.class_covs = np.array([np.cov(X.T) for c in self.classes])
 
     def predict(self, X):
         """
@@ -207,7 +218,7 @@ class LinearDiscriminantAnalysis1:
         # Compute discriminant function for each class
         for i, c in enumerate(self.classes):
             # Create a multivariate normal distribution for the class
-            mvn = multivariate_normal(mean=self.class_means[i], cov=self.class_covs[i])
+            mvn = multivariate_normal(mean=self.class_means[i], cov=self.class_covs[0])
             # Compute the log likelihood of each sample for the class
             discriminant = mvn.logpdf(X) + np.log(self.class_priors[i])
             discriminants.append(discriminant)
@@ -231,20 +242,40 @@ class LinearDiscriminantAnalysis1:
         """
         return np.mean(y_true == y_pred)
 
+#----------------------------------------
+
+"""
+Examples:
+------------------------------------------------
+
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+import numpy as np 
+import Logistic_Regression
 
 
+# Generate binary classification data with three features
+X, y = make_classification(n_samples=1000, n_features=3, n_informative=3,
+                           n_redundant=0, n_clusters_per_class=1, random_state=42)
 
+# Add more samples
+additional_samples = 1000
+X_additional, y_additional = make_classification(n_samples=additional_samples, n_features=3, n_informative=3,
+                                                  n_redundant=0, n_clusters_per_class=1, random_state=42)
 
+# Concatenate additional samples to existing dataset
+X = np.vstack([X, X_additional])
+y = np.concatenate([y, y_additional])
 
+# Split the dataset into training and testing sets
+test_size = 0.3  # 20% of the data will be used for testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
 
+LDA = LinearDiscriminantAnalysis()
 
+LDA.fit(X_train,y_train)
 
+y_pred = LDA.predict(X_test)
 
-
-
-
-
-
-
-
-
+print(LogR.accuracy(y_test,y_pred)) ---> 0.93
+"""
