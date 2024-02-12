@@ -54,7 +54,7 @@ class LinearRegression:
     def predict(self,X_test):
 
         X_test = np.c_[ X_test, np.ones(X_test.shape[0]) ]
-        print('X_test',X_test)
+        #print('X_test',X_test)
 
         Coefs = self.fit(Coef = False)
 
