@@ -218,7 +218,7 @@ class LinearDiscriminantAnalysis:
         # Compute discriminant function for each class
         for i, c in enumerate(self.classes):
             # Create a multivariate normal distribution for the class
-            mvn = multivariate_normal(mean=self.class_means[i], cov=self.class_covs[0])
+            mvn = multivariate_normal(mean=self.class_means[i], cov=self.class_covs[i])
             # Compute the log likelihood of each sample for the class
             discriminant = mvn.logpdf(X) + np.log(self.class_priors[i])
             discriminants.append(discriminant)
@@ -242,6 +242,30 @@ class LinearDiscriminantAnalysis:
         """
         return np.mean(y_true == y_pred)
 
+
+
+
+class QuadraticDiscriminantAnalysis(LinearDiscriminantAnalysis):
+
+    def __init__(self):
+        super().__init__()
+
+    def fit(self, X, y):
+
+        # Get unique class labels
+        self.classes = np.unique(y)
+
+        # Compute class priors
+        self.class_priors = np.array([np.mean(y == c) for c in self.classes])
+
+        # Compute class means
+        self.class_means = np.array([np.mean(X[y == c], axis=0) for c in self.classes])
+
+        # Compute class covariance matrices
+        self.class_covs = np.array([np.cov(X[y==c].T) for c in self.classes])
+
+
+
 #----------------------------------------
 
 """
@@ -250,8 +274,8 @@ Examples:
 
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
-import numpy as np 
-import Logistic_Regression
+import numpy as np
+import Bayes_Classifier
 
 
 # Generate binary classification data with three features
@@ -271,11 +295,19 @@ y = np.concatenate([y, y_additional])
 test_size = 0.3  # 20% of the data will be used for testing
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=42)
 
-LDA = LinearDiscriminantAnalysis()
+LDA = Bayes_Classifier.LinearDiscriminantAnalysis()
 
 LDA.fit(X_train,y_train)
 
 y_pred = LDA.predict(X_test)
 
-print(LogR.accuracy(y_test,y_pred)) ---> 0.93
+print(LDA.accuracy(y_test,y_pred)) -------------> 0.93
+
+QDA = Bayes_Classifier.QuadraticDiscriminantAnalysis()
+
+QDA.fit(X_train,y_train)
+
+y_pred = QDA.predict(X_test)
+
+print(QDA.accuracy(y_test,y_pred)) -------------> 0.9683
 """
