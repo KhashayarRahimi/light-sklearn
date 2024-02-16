@@ -1,5 +1,5 @@
 """
-The implementation of this class with a small modification is belong the following website:
+The implementation of this class is belong the following website:
 https://www.oranlooney.com/post/ml-from-scratch-part-5-gmm/
 However I have modified it a little;
 1. initializer using kmeans
