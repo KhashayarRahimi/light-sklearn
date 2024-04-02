@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import numpy as np
 import re
 
@@ -340,7 +339,7 @@ class DecisionTree:
             
 #---------------------------------------
         
-"""
+
 Example:
 
 import Decision_Tree
@@ -370,5 +369,5 @@ y_pred = DT.predict(Box,X_test)
 
 print('acc:',DT.accuracy(y_test,y_pred))
 
->>>>>>> c5961c311231dd98ee80d50b6bd422c68df1a9b5
+
 """
